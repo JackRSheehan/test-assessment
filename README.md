@@ -2,8 +2,8 @@
 
 Installation requirements:
 
-* JDK ver. 11 and above
-* Gradle ver. 5 and above
+* JDK ver. 17 and above
+* Gradle ver. 7 and above
 * Docker (for the postgres container)
 
 To run the service, execute the command `gradle run`.
