@@ -1,6 +1,8 @@
 package co.copper.test.storage;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import co.copper.test.datamodel.Person;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,6 +19,10 @@ public class PeopleJavaRepository {
     private final NamedParameterJdbcTemplate jdbcTemplate;
     private final JacksonBeanRowMapper<Person> rowMapper;
 
+    private String sqlInsetStatement =
+            "INSERT INTO people (firstName, lastName, email, password) " +
+            "VALUES (:firstName, :lastName, :email, :password)";
+
     @Autowired
     public PeopleJavaRepository(NamedParameterJdbcTemplate jdbcTemplate, ObjectMapper mapper) {
         this.jdbcTemplate = jdbcTemplate;
@@ -27,8 +33,16 @@ public class PeopleJavaRepository {
         return jdbcTemplate.query("SELECT * FROM people", rowMapper);
     }
 
-    public void savePeople(final Person people) {
-        //jdbcTemplate.query("")
+    public void savePeople(List<Person> people) {
+        for (Person person : people) {
+            Map<String, String> dbInsertParams = new HashMap<>();
+            dbInsertParams.put("firstName", person.getFirst());
+            dbInsertParams.put("lastName", person.getLast());
+            dbInsertParams.put("email", person.getEmail());
+            dbInsertParams.put("password", person.getPassword());
+
+            jdbcTemplate.update(sqlInsetStatement, dbInsertParams);
+        }
     }
 
 }

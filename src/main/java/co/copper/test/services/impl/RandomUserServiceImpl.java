@@ -32,18 +32,25 @@ public class RandomUserServiceImpl implements RandomUserService {
 
     public List<Person> getUsers() throws GetUsersException {
         try {
+            log.debug("Attempting to fetch the users from the external API.");
             String resultString = this.httpClient.prepareGet("https://randomuser.me/api/?results=20").execute().toCompletableFuture()
                     .handle((res, t) -> res.getResponseBody()).get();
 
+            log.debug("Attempting to parse the external users into RandomUser format.");
             RandomUsers randomUsers = objectMapper.readValue(resultString, RandomUsers.class);
 
+            log.debug("Returning the random users in list format.");
             return randomUsers.getResults().stream().map(randomUser -> Person.builder()
+                    .first(randomUser.getName().getFirst())
+                    .last(randomUser.getName().getLast())
                     .email(randomUser.getEmail())
-                    .firstName(randomUser.getName().getFirst())
-                    .lastName(randomUser.getName().getLast())
-                    .password(randomUser.getLogin()).build()).toList();
+                    .password(randomUser.getLogin().getPassword()).build()).toList();
         } catch (ExecutionException | InterruptedException | JsonProcessingException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
             log.error("Error whilst fetching the users from the external API.");
+            log.error(e.getMessage());
             throw new GetUsersException(e.getMessage());
         }
 

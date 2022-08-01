@@ -19,7 +19,7 @@ public class CopperServiceImpl implements CopperService {
     private final PeopleJavaRepository peopleJavaRepository;
 
     @Autowired
-    public CopperService(PeopleJavaRepository peopleJavaRepository) {
+    public CopperServiceImpl(PeopleJavaRepository peopleJavaRepository) {
         this.peopleJavaRepository = peopleJavaRepository;
     }
 
@@ -28,6 +28,6 @@ public class CopperServiceImpl implements CopperService {
     }
 
     public void savePeople(List<Person> users) {
-
+        peopleJavaRepository.savePeople(users);
     }
 }

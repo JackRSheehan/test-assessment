@@ -1,11 +1,9 @@
 package co.copper.test.controller;
 
 import co.copper.test.datamodel.Person;
-import co.copper.test.datamodel.RandomUsers;
 import co.copper.test.exceptions.GetUsersException;
 import co.copper.test.services.CopperService;
 import co.copper.test.services.RandomUserService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import org.springframework.http.HttpStatus;
 
@@ -40,7 +36,10 @@ public class CopperController {
     @PostMapping("/saveUsers")
     public ResponseEntity<HttpStatus> savePeople() {
         try {
+            log.info("Fetching the users from the external API");
             List<Person> randomUsers = randomUserService.getUsers();
+
+            log.info("Saving the external users into the database.");
             copperService.savePeople(randomUsers);
 
             return new ResponseEntity<>(HttpStatus.OK);

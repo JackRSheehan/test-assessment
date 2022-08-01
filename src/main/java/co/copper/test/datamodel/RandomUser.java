@@ -14,7 +14,6 @@ public class RandomUser {
 
     private Name name;
     private String email;
-    private String login;
-
+    private Login login;
 
 }
