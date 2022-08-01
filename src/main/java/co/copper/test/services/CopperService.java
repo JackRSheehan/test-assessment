@@ -1,34 +1,13 @@
 package co.copper.test.services;
 
 import co.copper.test.datamodel.Person;
-import co.copper.test.datamodel.RandomUsers;
-import co.copper.test.storage.PeopleJavaRepository;
-import org.asynchttpclient.AsyncHttpClient;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class CopperService {
+public interface CopperService {
 
-    private static final Logger log = LoggerFactory.getLogger(CopperService.class);
-    private final PeopleJavaRepository peopleJavaRepository;
-    private final AsyncHttpClient httpClient;
-
-    @Autowired
-    public CopperService(PeopleJavaRepository peopleJavaRepository, AsyncHttpClient httpClient) {
-        this.peopleJavaRepository = peopleJavaRepository;
-        this.httpClient = httpClient;
-    }
-
-    public List<Person> getPeople() {
-        return peopleJavaRepository.getPeople();
-    }
-
-    public void savePeople(List<Person> users) {
-
-    }
+    public List<Person> getPeople();
+    public void savePeople(List<Person> users);
 }

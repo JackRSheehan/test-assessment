@@ -2,6 +2,7 @@ package co.copper.test.controller;
 
 import co.copper.test.datamodel.Person;
 import co.copper.test.datamodel.RandomUsers;
+import co.copper.test.exceptions.GetUsersException;
 import co.copper.test.services.CopperService;
 import co.copper.test.services.RandomUserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -43,9 +44,7 @@ public class CopperController {
             copperService.savePeople(randomUsers);
 
             return new ResponseEntity<>(HttpStatus.OK);
-        } catch (JsonProcessingException | ExecutionException | InterruptedException exception) {
-            log.error("Error whilst attempting to fetch and save users");
-            log.error(exception.getMessage());
+        } catch (GetUsersException e) {
             return new ResponseEntity<>(HttpStatus.FAILED_DEPENDENCY);
         }
     }

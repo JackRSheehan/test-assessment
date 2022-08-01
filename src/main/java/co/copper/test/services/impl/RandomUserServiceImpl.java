@@ -1,0 +1,51 @@
+package co.copper.test.services.impl;
+
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+
+import co.copper.test.datamodel.Person;
+import co.copper.test.datamodel.RandomUsers;
+import co.copper.test.exceptions.GetUsersException;
+import co.copper.test.services.RandomUserService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.asynchttpclient.AsyncHttpClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+
+@Service
+public class RandomUserServiceImpl implements RandomUserService {
+
+    private static final Logger log = LoggerFactory.getLogger(RandomUserServiceImpl.class);
+    private final AsyncHttpClient httpClient;
+
+    ObjectMapper objectMapper;
+
+    @Autowired
+    public RandomUserServiceImpl(AsyncHttpClient httpClient, ObjectMapper objectMapper) {
+        this.httpClient = httpClient;
+        this.objectMapper = objectMapper;
+    }
+
+    public List<Person> getUsers() throws GetUsersException {
+        try {
+            String resultString = this.httpClient.prepareGet("https://randomuser.me/api/?results=20").execute().toCompletableFuture()
+                    .handle((res, t) -> res.getResponseBody()).get();
+
+            RandomUsers randomUsers = objectMapper.readValue(resultString, RandomUsers.class);
+
+            return randomUsers.getResults().stream().map(randomUser -> Person.builder()
+                    .email(randomUser.getEmail())
+                    .firstName(randomUser.getName().getFirst())
+                    .lastName(randomUser.getName().getLast())
+                    .password(randomUser.getLogin()).build()).toList();
+        } catch (ExecutionException | InterruptedException | JsonProcessingException e) {
+            log.error("Error whilst fetching the users from the external API.");
+            throw new GetUsersException(e.getMessage());
+        }
+
+    }
+}
