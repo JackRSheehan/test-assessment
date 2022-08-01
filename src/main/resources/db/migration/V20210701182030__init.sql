@@ -1,9 +1,12 @@
-CREATE TABLE test (
+CREATE TABLE people (
     id NUMERIC PRIMARY KEY,
-    val text
+    firstName text,
+    lastName text,
+    email text,
+    password text
 );
 
-INSERT INTO test(id, val)
-VALUES (1, 'some text');
+INSERT INTO people(id, firstName, lastName, email, password)
+VALUES (1, 'john', 'smith', 'j@email.com', 'hello');
 
 
