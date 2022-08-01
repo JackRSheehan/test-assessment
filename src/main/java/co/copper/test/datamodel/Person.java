@@ -12,8 +12,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Person {
 
-    private String firstName;
-    private String lastName;
+    private String first;
+    private String last;
     private String email;
     private String password;
 
