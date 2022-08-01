@@ -13,7 +13,7 @@ import com.sbuslab.utils.Logging
 
 import co.copper.test.routes.TestRoutes
 
-object Application extends App with Logging {
+object ScalaApplication extends App with Logging {
   val ctx = new AnnotationConfigApplicationContext(classOf[ApplicationConfiguration])
 
   implicit val system = ctx.getBean(classOf[ActorSystem])

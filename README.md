@@ -17,3 +17,5 @@ You can choose any other framework you prefer, but you have to prepare all corre
 During the online assessment, you will create a small service interacting with an external API, storing some data in a database and providing HTTP endpoints to interact with the service itself.
 You will implement this service step by step during the online session. 
 **Before** this session, you should set up your environment (IDE, docker, etc). You should also share your screen during the test assessment, so we can discuss and review your actions. 
+
+If you are taking the Java version of this assessment there is an extra step you need to complete. In `build.gradle` you must comment out line 13 which starts the Scala application and uncomment line 14 which will instead start the Java application.
